@@ -67,7 +67,7 @@ const displayCurrent = function(searchData, city) {
 };
 
 const getCurrentUV = function(latitude, longitude) {
-    let cityLocationRequest = "http://api.openweathermap.org/data/2.5/uvi?appid=bce603202b1195d47aa1fdd3412da455&lat=" + latitude + "&lon=" + longitude;
+    let cityLocationRequest = "https://api.openweathermap.org/data/2.5/uvi?appid=bce603202b1195d47aa1fdd3412da455&lat=" + latitude + "&lon=" + longitude;
     fetch(cityLocationRequest).then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
@@ -116,7 +116,7 @@ const getCurrentUV = function(latitude, longitude) {
 }
 
 const getForecast = function(city) {
-    let apiCity = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial&appid=bce603202b1195d47aa1fdd3412da455";
+    let apiCity = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial&appid=bce603202b1195d47aa1fdd3412da455";
 
     forecastEl.innerHTML = "";
     forecastEl.textContent = "";
