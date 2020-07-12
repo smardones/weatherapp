@@ -1,24 +1,38 @@
+header {
+    text-align: center;
+}
+
 .favorable-uv {
     background-color: green;
     color: white;
+    margin-left: 5px;
 }
 
 .moderate-uv {
     background-color: yellow;
     color: black;
+    margin-left: 5px;
 }
 
 .high-uv {
     background-color: orange;
     color: black;
+    margin-left: 5px;
 }
 
 .very-high-uv {
     background-color: red;
     color: white;
+    margin-left: 5px;
 }
 
 .extreme-uv {
     background-color: violet;
     color: white;
+    margin-left: 5px;
 }
+
+.future-weather {
+    background-color: #00b4d8;
+}
+

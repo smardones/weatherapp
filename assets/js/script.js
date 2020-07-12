@@ -4,6 +4,8 @@ const citySearchEl = document.querySelector("#search-city");
 const currentWeatherEl = document.querySelector("#current-weather");
 const cityNameEl = document.querySelector("#city-namedate");
 const forecastEl = document.querySelector("#forecast");
+const searchHistoryEl = document.querySelector("#search-history");
+let pastCities = [];
 
 const formSubmitHandler = function(event) {
     event.preventDefault();
@@ -13,7 +15,7 @@ const formSubmitHandler = function(event) {
     if (searchCity) {
         getCurrentWeather(searchCity);
         getForecast(searchCity);
-        // logSearchCity(searchCity);
+        logSearchCity(searchCity);
     } else {
         alert("Please enter a city.");
     }
@@ -49,7 +51,7 @@ const displayCurrent = function(searchData, city) {
     tempEl.className = "weather-data";
 
     let humitdityEl = document.createElement("p")
-    humitdityEl.textContent = "Humidity: " + searchData.main.humidity;
+    humitdityEl.textContent = "Humidity: " + searchData.main.humidity +"%";
     humitdityEl.className = "weather-data";
 
     let windEl = document.createElement("p");
@@ -116,6 +118,8 @@ const getCurrentUV = function(latitude, longitude) {
 const getForecast = function(city) {
     let apiCity = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial&appid=bce603202b1195d47aa1fdd3412da455";
 
+    forecastEl.innerHTML = "";
+    forecastEl.textContent = "";
     fetch(apiCity).then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
@@ -123,19 +127,24 @@ const getForecast = function(city) {
                   let temp = data.list[i].main.temp;
                   let humidity = data.list[i].main.humidity;
                   let date = (moment().add(i, "days")).format("MM/DD/YYYY");
+                  let icon = data.list[i].weather[0].icon;
                   
                   // create forecast card
                   let dailyForecastEl = document.createElement("div");
-                  dailyForecastEl.classList = "card mx-2 my-3 p-1";
+                  dailyForecastEl.classList = "card mx-2 my-3 p-1 future-weather";
                 // create and add data components to the card
                   let forecastDateHeader = document.createElement("div")
                   forecastDateHeader.className = "card-title";
                   forecastDateHeader.textContent = date;
                   dailyForecastEl.appendChild(forecastDateHeader);
-
+                  
+                  let weatherIconEl = document.createElement("img")
+                  weatherIconEl.className = "w-50"
+                  weatherIconEl.setAttribute("src", " http://openweathermap.org/img/wn/" + icon +".png");
+                  dailyForecastEl.appendChild(weatherIconEl);
                   let forecastDailyData = document.createElement("div");
                   forecastDailyData.className = "card-text";
-                  forecastDailyData.innerHTML = "<p>Temp: " + temp + "&#176F</p> <p>Humidity: " + humidity + "</p>";
+                  forecastDailyData.innerHTML = "<p>Temp: " + temp + "&#176F</p> <p>Humidity: " + humidity + "%</p>";
                   dailyForecastEl.appendChild(forecastDailyData);
 
                   forecastEl.appendChild(dailyForecastEl);
@@ -146,8 +155,42 @@ const getForecast = function(city) {
     })
 };
 
-const logSearchCity = function() {
+const logSearchCity = function(city) {
+    let previousSearch = document.createElement("button");
+    previousSearch.classList = "list-group-item list-group-item-action";
+    previousSearch.setAttribute("type", "button");
+    previousSearch.textContent = city;
+    searchHistoryEl.appendChild(previousSearch);
+
+    pastCities.push(city);
     
+    localStorage.setItem("cities", JSON.stringify(pastCities));
 };
 
-searchFormEl.addEventListener("submit", formSubmitHandler)
+const historySearchHandler = function() {
+    let city = event.target.textContent;
+    
+
+    getCurrentWeather(city);
+    getForecast(city);
+}
+
+const loadSearchHistory = function() {
+    let retrievedCities = JSON.parse(localStorage.getItem("cities"));
+    
+    pastCities = pastCities.concat(retrievedCities);
+
+    for(let i = 0; i < retrievedCities.length; i++) {
+        let pastCityEl = document.createElement("button");
+        pastCityEl.classList = "list-group-item list-group-item-action";
+        pastCityEl.setAttribute("type", "button");
+        pastCityEl.textContent = retrievedCities[i];
+
+        searchHistoryEl.appendChild(pastCityEl);
+    }
+}
+
+searchFormEl.addEventListener("submit", formSubmitHandler);
+searchHistoryEl.addEventListener("click", historySearchHandler);
+
+loadSearchHistory();
