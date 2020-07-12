@@ -1,0 +1,24 @@
+.favorable-uv {
+    background-color: green;
+    color: white;
+}
+
+.moderate-uv {
+    background-color: yellow;
+    color: black;
+}
+
+.high-uv {
+    background-color: orange;
+    color: black;
+}
+
+.very-high-uv {
+    background-color: red;
+    color: white;
+}
+
+.extreme-uv {
+    background-color: violet;
+    color: white;
+}
