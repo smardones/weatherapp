@@ -5,7 +5,7 @@ Plan ahead by using this intuitive weather application. Search for weather for t
 
 ## Screenshot
 
-![Screenshot](/assets/images/Screenshot.png)
+![Screenshot](/assets/images/Screenshot.png "Screenshot of Weather App")
 
 
 ## Website
